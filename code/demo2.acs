@@ -1,0 +1,49 @@
+#include "zcommon.acs"
+
+#define PLAYERTIDBASE	10000
+#define BARRELTAG 		1000
+
+// The arrow is not pointing exactly where the object is.
+// Instead, it lags behind a few frames for a compass-like effect :D.
+#define ARROW_MAXLAG 4
+int arrowlag[ARROW_MAXLAG];
+
+#define ARROWSPRITES 32
+
+script 1 ENTER
+{
+	// Basic setup.
+    int player = PlayerNumber();
+	int ptag = PLAYERTIDBASE+player;
+	int dx, dy, angle, printindex, newindex;
+    int step = 1.0/ARROWSPRITES;
+
+    Thing_ChangeTID(ptag, 0); // untag the corpse (if it exists)
+    Thing_ChangeTID(0, ptag); // tag the player
+    Delay(2);
+
+	SetHudSize (640, 480, 0);
+
+	while (GetActorProperty(ptag, APROP_Health) > 0)
+	{
+		dx = GetActorX(BARRELTAG) - GetActorX(ptag);
+		dy = GetActorY(BARRELTAG) - GetActorY(ptag);
+		angle = (VectorAngle(dx, dy) - GetActorAngle(ptag) + 1.0) % 1.0;
+		
+		newindex = ((ARROWSPRITES - (angle+step/2)/step)+ARROWSPRITES)%ARROWSPRITES;
+		
+		for (int i=0; i<ARROW_MAXLAG-1; i++) 
+			arrowlag[i] = arrowlag[i+1];
+                
+		arrowlag[ARROW_MAXLAG-1] = newindex;   
+		printindex = arrowlag[0];
+		
+		if (printindex == -1) continue;
+
+		SetFont("ARROWFNT");
+		HudMessage(c:'0'+printindex; HUDMSG_PLAIN, 100, CR_RED, 320.0, 240.0, 0);
+		
+		Delay(1);
+	}
+
+}
