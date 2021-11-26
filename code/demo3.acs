@@ -6,13 +6,13 @@
 script 1 ENTER
 {
 	// Basic setup.
-    int player = PlayerNumber();
+	int player = PlayerNumber();
 	int ptag = PLAYERTIDBASE+player;
 	int dx, dy, angle;
 
-    Thing_ChangeTID(ptag, 0); // untag the corpse (if it exists)
-    Thing_ChangeTID(0, ptag); // tag the player
-    Delay(2);
+	Thing_ChangeTID(ptag, 0); // untag the corpse (if it exists)
+	Thing_ChangeTID(0, ptag); // tag the player
+	Delay(2);
 
 	SetFont("TRES4FNT");
 	SetHudSize (640, 480, 0);
@@ -25,13 +25,13 @@ script 1 ENTER
 
 		Print(s:"Barrel at dx: ", d:dx, s:", dy: ", d:dy, s:", angle: ", d:angle >> 8, s:"\nYour angle: ", d:GetActorAngle(ptag) >> 8);
 
-        if (angle < 0.2)
-            HudMessage (s:"<"; HUDMSG_PLAIN, 1, CR_RED, 320.0, 320.0, 0);
+		if (angle < 0.2)
+			HudMessage (s:"<"; HUDMSG_PLAIN, 1, CR_RED, 320.0, 320.0, 0);
 		else if (angle > 0.8)
-            HudMessage (s:">"; HUDMSG_PLAIN, 1, CR_RED, 320.0, 320.0, 0);
-        else
-            HudMessage (s:""; HUDMSG_PLAIN, 1, 0, 0, 0, 0);
-			
+			HudMessage (s:">"; HUDMSG_PLAIN, 1, CR_RED, 320.0, 320.0, 0);
+		else
+			HudMessage (s:""; HUDMSG_PLAIN, 1, 0, 0, 0, 0);
+
 		Delay(1);
 	}
 
